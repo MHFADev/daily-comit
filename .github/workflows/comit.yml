@@ -1,17 +1,22 @@
 name: Auto Commit
 
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: "0 18 * * *"   # 01:00 WIB setiap hari
-  workflow_dispatch:       # bisa jalan manual
+  workflow_dispatch:
 
 jobs:
-  build:
+  auto-commit:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          persist-credentials: true
 
       - name: Setup Git
         run: |
@@ -22,8 +27,8 @@ jobs:
         run: |
           echo "$(date)" >> log.txt
 
-      - name: Commit changes
+      - name: Commit & Push
         run: |
           git add .
           git commit -m "chore: daily auto commit" || echo "No changes to commit"
-          git push
+          git push origin HEAD:main
