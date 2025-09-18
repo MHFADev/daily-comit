@@ -2,8 +2,8 @@ name: Auto Commit
 
 on:
   schedule:
-    - cron: "0 18 * * *"   # Jalan tiap hari jam 9 pagi UTC
-  workflow_dispatch:       # Bisa juga dijalankan manual dari tab "Actions"
+    - cron: "0 18 * * *"   # 01:00 WIB setiap hari
+  workflow_dispatch:       # bisa jalan manual
 
 jobs:
   build:
@@ -25,5 +25,5 @@ jobs:
       - name: Commit changes
         run: |
           git add .
-          git commit -m "chore: daily auto commit [skip ci]" || echo "No changes to commit"
+          git commit -m "chore: daily auto commit" || echo "No changes to commit"
           git push
