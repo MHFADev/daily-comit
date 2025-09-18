@@ -1,1 +1,29 @@
+name: Auto Commit
 
+on:
+  schedule:
+    - cron: "0 18 * * *"   # Jalan tiap hari jam 9 pagi UTC
+  workflow_dispatch:       # Bisa juga dijalankan manual dari tab "Actions"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "MHFADev"
+          git config --global user.email "hilmi.firjatullah12@gmail.com"
+
+      - name: Make changes
+        run: |
+          echo "$(date)" >> log.txt
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "chore: daily auto commit [skip ci]" || echo "No changes to commit"
+          git push
