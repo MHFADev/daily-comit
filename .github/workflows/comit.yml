@@ -1,34 +1,31 @@
-name: Auto Commit
-
-permissions:
-  contents: write
+name: Powerful Daily 3x Commit WIB
 
 on:
   schedule:
-    - cron: "0 18 * * *"   # 01:00 WIB setiap hari
-  workflow_dispatch:
+    # 07:00 WIB = 00:00 UTC
+    - cron: '0 0 * * *'
 
 jobs:
-  auto-commit:
+  powerful-commit:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: true
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup Git
+      - name: Generate and commit 3 times
         run: |
-          git config --global user.name "MHFADev"
-          git config --global user.email "hilmi.firjatullah12@gmail.com"
+          for i in 1 2 3
+          do
+            echo "Commit $i at $(TZ='Asia/Jakarta' date)" >> daily-commit.log
+            git config --global user.name 'github-actions[bot]'
+            git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+            git add daily-commit.log
+            git commit -m "chore: auto commit $i at $(TZ='Asia/Jakarta' date)"
+            sleep 2
+          done
 
-      - name: Make changes
-        run: |
-          echo "$(date)" >> log.txt
-
-      - name: Commit & Push
-        run: |
-          git add .
-          git commit -m "chore: daily auto commit" || echo "No changes to commit"
-          git push origin HEAD:main
+      - name: Push all commits
+        run: git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
