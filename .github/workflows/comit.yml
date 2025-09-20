@@ -3,7 +3,7 @@ name: Powerful Daily 3x Commit WIB
 on:
   schedule:
     # 07:00 WIB = 00:00 UTC
-    - cron: '0 0 * * *'
+    - cron: '0 23 * * *'
   workflow_dispatch:
 
 permissions:
@@ -23,7 +23,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          for i in 1 2 3 4
+          for i in 1 2 3 4 5 6 7 8 9
           do
             echo "Commit $i at $(TZ='Asia/Jakarta' date)" >> daily-commit.log
             git add daily-commit.log
